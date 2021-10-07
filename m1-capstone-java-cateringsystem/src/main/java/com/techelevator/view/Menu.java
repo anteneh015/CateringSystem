@@ -1,5 +1,6 @@
 package com.techelevator.view;
 
+import com.techelevator.CateringSystem;
 import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.items.CateringItem;
 import com.techelevator.items.Inventory;
@@ -20,6 +21,7 @@ public class Menu {
 	
 	private static final Scanner in = new Scanner(System.in);
 	private Inventory inventory;
+	private CateringSystem cateringSystem = new CateringSystem();
 
 	public void showWelcomeMessage() {
 		System.out.println("*************************");
@@ -34,11 +36,23 @@ public class Menu {
 		System.out.println("(2) Order");
 		System.out.println("(3) Quit");
 
-		if(in.nextLine().equals("1")){
+		String userInput = in.nextLine();
+
+		if(userInput.equals("1")){
 			for(CateringItem item : inventory.getInventoryList()){
 				System.out.println(item);
 			}
+		}else if(userInput.equals("2")){
+			this.orderMenu();
 		}
+
+
+	}
+	public void orderMenu(){
+		System.out.println("(1) Add money");
+		System.out.println("(2) Select products");
+		System.out.println("(3) Complete transaction");
+		System.out.println("Current account balance: " + cateringSystem.getAccountBalance());
 
 
 	}

@@ -32,6 +32,10 @@ public class InventoryFileReader {
             while(fileScanner.hasNextLine()){
 
                 String line = fileScanner.nextLine();
+                String[] splitLine = line.split("\\|");
+                double price = Double.parseDouble(splitLine[3]);
+                CateringItem cateringItem = new CateringItem(splitLine[2], price, splitLine[1], splitLine[0] );
+                inventory.add(cateringItem);
 
 
             }

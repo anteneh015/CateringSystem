@@ -34,11 +34,13 @@ public class CateringSystemCLI {
 	public void run() throws FileNotFoundException {
 
 		menu.showWelcomeMessage();
+		menu.inventory();
+		menu.restock();
 
 		while (true) {
 
-			menu.inventory();
-			menu.restock();
+
+
 			menu.showMainMenu();
 			/*
 			Display the Starting Menu and get the users choice.
