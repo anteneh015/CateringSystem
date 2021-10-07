@@ -2,6 +2,8 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 
+import java.io.FileNotFoundException;
+
 /*
  * This class should control the workflow of the application, but not do any other work
  * 
@@ -29,12 +31,15 @@ public class CateringSystemCLI {
 	/*
 	 * Your application starts here
 	 */
-	public void run() {
+	public void run() throws FileNotFoundException {
 
 		menu.showWelcomeMessage();
 
-
 		while (true) {
+
+			menu.inventory();
+			menu.restock();
+			menu.showMainMenu();
 			/*
 			Display the Starting Menu and get the users choice.
 			Remember all uses of System.out and System.in should be in the menu
@@ -50,7 +55,7 @@ public class CateringSystemCLI {
 	/*
 	 * This starts the application, but you shouldn't need to change it.  
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		Menu menu = new Menu();
 		CateringSystemCLI cli = new CateringSystemCLI(menu);
 		cli.run();
