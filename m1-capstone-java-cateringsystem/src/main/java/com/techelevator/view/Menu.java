@@ -95,11 +95,9 @@ public class Menu {
 	}
 
 	public void restock(){
-
 		for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
 			item.setProductCount(25);
 		}
-
 	}
 
 
