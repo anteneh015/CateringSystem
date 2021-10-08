@@ -80,8 +80,8 @@ public class Menu {
 		System.out.println("Balance limit exceeded or invalid input, please try again.");
 	}
 
-	public void displayChange(Map<String, Integer> changeMap){
-		System.out.println("Your change is: ");
+	public void displayChange(Map<String, Integer> changeMap, double accountBalance){
+		System.out.println("Your change is: " + currency.format(accountBalance));
 		for(Map.Entry<String, Integer> nextEntry : changeMap.entrySet() ){
 			String key = nextEntry.getKey();
 			Integer value = nextEntry.getValue();
@@ -90,11 +90,19 @@ public class Menu {
 		System.out.println();
 	}
 	public void displayTransactionReport(Map<CateringItem, Integer> shoppingCart){
+		double totalPrice = 0;
+		System.out.printf("%-4s %-15s %-25s %10s %11s %n", "QTY.", "Type", "Name", "Price", "Total");
 		for (Map.Entry<CateringItem, Integer> nextEntry : shoppingCart.entrySet()){
 			CateringItem key = nextEntry.getKey();
 			Integer value = nextEntry.getValue();
-			System.out.printf("%-4s %-15s %-35s %10s %10s %n", value, key.getProductType(), key.getName(), currency.format(key.getPrice()), currency.format(value * key.getPrice()));
+			System.out.printf("%-4s %-15s %-25s %10s %11s %n",
+					value, key.getProductType(), key.getName(),
+					currency.format(key.getPrice()), currency.format(value * key.getPrice()));
+			totalPrice += value * key.getPrice();
 		}
+		System.out.println();
+		System.out.println("Order Total: " + currency.format(totalPrice));
+		System.out.println();
 	}
 
 	public String askForProductCode() {

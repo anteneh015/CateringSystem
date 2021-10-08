@@ -69,6 +69,8 @@ public class CateringSystemCLI {
 			String userMainMenuSelection = menu.showMainMenu();
 			// if (1) Display Items
 			if(userMainMenuSelection.equals("1")){
+				// TODO FIX SOLD OUT Formatting
+				// TODO Touch up formatting for display
 				menu.displayCateringItems(cateringSystem.getInventoryList());
 				// else if (2) Order Menu
 			}else if(userMainMenuSelection.equals("2")){
@@ -86,18 +88,16 @@ public class CateringSystemCLI {
 						String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
 						menu.shoppingCartMessage(cartMessage);
 					}else if (userOrderMenuSelection.equals("3")){
+						double accountBalance = cateringSystem.getAccountBalance();
 						Map<String, Integer> changeMap = cateringSystem.getChange();
-						menu.displayChange(changeMap);
+						menu.displayChange(changeMap, accountBalance);
 						menu.displayTransactionReport(cateringSystem.getShoppingCart());
+						break;
 
 					}
 				}
-			}
-
-			//Quit selection
-			else if (userMainMenuSelection.equals("3")) {
-
-
+			} else if (userMainMenuSelection.equals("3")) {
+				break;
 			}
 
 				// Display Order Menu
