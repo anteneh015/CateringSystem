@@ -11,6 +11,8 @@ import com.techelevator.items.CateringItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -35,33 +37,34 @@ public class CateringSystem {
 //        }
 //    }\
     public Map<String, Integer> getChange() {
-        double remainingBalance = accountBalance;
+        BigDecimal remainingBalance = BigDecimal.valueOf(accountBalance);
         Map<String, Integer> changeMap = new LinkedHashMap<>();
         String bill = "";
+        BigDecimal zero = new BigDecimal(0);
+        MathContext m = new MathContext(2);
 
-
-        while (remainingBalance > 0) {
-            if (remainingBalance - 20 >= 0) {
+        while (remainingBalance.compareTo(zero) > 0) {
+            if (remainingBalance.subtract(new BigDecimal(20)).compareTo(zero) >= 0) {
                 bill = "20(s)";
-                remainingBalance -= 20;
-            } else if (remainingBalance - 10 >= 0) {
+                remainingBalance = remainingBalance.subtract(new BigDecimal(20));
+            } else if (remainingBalance.subtract(new BigDecimal(10)).compareTo(zero) >= 0) {
                 bill = "10(s)";
-                remainingBalance -= 10;
-            } else if (remainingBalance - 5 >= 0) {
+                remainingBalance = remainingBalance.subtract(new BigDecimal(10));
+            } else if (remainingBalance.subtract(new BigDecimal(5)).compareTo(zero) >= 0) {
                 bill = "5(s)";
-                remainingBalance -= 5;
-            } else if (remainingBalance - 1 >= 0) {
+                remainingBalance = remainingBalance.subtract(new BigDecimal(5));
+            } else if (remainingBalance.subtract(new BigDecimal(1)).compareTo(zero) >= 0) {
                 bill = "1(s)";
-                remainingBalance -= 1;
-            } else if (remainingBalance - .25 >= 0) {
+                remainingBalance = remainingBalance.subtract(new BigDecimal(1));
+            } else if (remainingBalance.subtract(new BigDecimal(.25).round(m)).compareTo(zero) >= 0){
                 bill = "Quarter(s)";
-                remainingBalance -= .25;
-            } else if (remainingBalance - .10 >= 0) {
+                remainingBalance = remainingBalance.subtract(new BigDecimal(.25).round(m));
+            } else if (remainingBalance.subtract(new BigDecimal(.10).round(m)).compareTo(zero) >= 0) {
                 bill = "Dime(s)";
-                remainingBalance -= .10;
-            } else if (remainingBalance - .05 >= 0) {
+                remainingBalance = remainingBalance.subtract(new BigDecimal(.10).round(m));
+            } else if (remainingBalance.subtract(new BigDecimal(.05).round(m)).compareTo(zero) >= 0){
                 bill = "Nickel(s)";
-                remainingBalance -= .05;
+                remainingBalance = remainingBalance.subtract(new BigDecimal(.05).round(m));
             }
             if(changeMap.containsKey(bill)){
                 changeMap.put(bill, changeMap.get(bill) + 1 );
