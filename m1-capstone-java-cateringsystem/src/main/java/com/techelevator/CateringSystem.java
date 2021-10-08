@@ -69,7 +69,9 @@ public class CateringSystem {
                 changeMap.put(bill, 1);
             }
 
-        } return changeMap;
+        }
+        subtractAccountBalance(accountBalance);
+        return changeMap;
     }
     public double getAccountBalance() {
         return accountBalance;

@@ -89,6 +89,13 @@ public class Menu {
 		}
 		System.out.println();
 	}
+	public void displayTransactionReport(Map<CateringItem, Integer> shoppingCart){
+		for (Map.Entry<CateringItem, Integer> nextEntry : shoppingCart.entrySet()){
+			CateringItem key = nextEntry.getKey();
+			Integer value = nextEntry.getValue();
+			System.out.printf("%-4s %-15s %-35s %10s %10s %n", value, key.getProductType(), key.getName(), currency.format(key.getPrice()), currency.format(value * key.getPrice()));
+		}
+	}
 
 	public String askForProductCode() {
 		System.out.println("Input the Product Code of the desired item: ");

@@ -88,6 +88,7 @@ public class CateringSystemCLI {
 					}else if (userOrderMenuSelection.equals("3")){
 						Map<String, Integer> changeMap = cateringSystem.getChange();
 						menu.displayChange(changeMap);
+						menu.displayTransactionReport(cateringSystem.getShoppingCart());
 
 					}
 				}
