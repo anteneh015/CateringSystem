@@ -6,6 +6,7 @@ import com.techelevator.view.Menu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Map;
 
 /*
  * This class should control the workflow of the application, but not do any other work
@@ -79,17 +80,22 @@ public class CateringSystemCLI {
 						if (!moneyIsAdded) {
 							menu.displayAddMoneyError();
 						}
-					} else if (userMainMenuSelection.equals("2")) {
+					} else if (userOrderMenuSelection.equals("2")) {
 						String desiredItem = menu.askForProductCode();
 						int desiredQuantity = menu.askForQuantity();
 						String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
 						menu.shoppingCartMessage(cartMessage);
+					}else if (userOrderMenuSelection.equals("3")){
+						Map<String, Integer> changeMap = cateringSystem.getChange();
+						menu.displayChange(changeMap);
+
 					}
 				}
 			}
 
-			//Complete Transaction
+			//Quit selection
 			else if (userMainMenuSelection.equals("3")) {
+
 
 			}
 

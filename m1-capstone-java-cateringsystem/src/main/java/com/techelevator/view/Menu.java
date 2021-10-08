@@ -6,6 +6,7 @@ import com.techelevator.items.CateringItem;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /*
@@ -77,6 +78,16 @@ public class Menu {
 
 	public void displayAddMoneyError() {
 		System.out.println("Balance limit exceeded or invalid input, please try again.");
+	}
+
+	public void displayChange(Map<String, Integer> changeMap){
+		System.out.println("Your change is: ");
+		for(Map.Entry<String, Integer> nextEntry : changeMap.entrySet() ){
+			String key = nextEntry.getKey();
+			Integer value = nextEntry.getValue();
+			System.out.println(value + " " + key);
+		}
+		System.out.println();
 	}
 
 	public String askForProductCode() {
