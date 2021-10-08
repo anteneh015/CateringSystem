@@ -13,12 +13,11 @@ import java.util.Scanner;
  */
 public class InventoryFileReader {
 
-    private String inventoryFileName;
+
     private String filePath;
     private File inventoryFile;
 
-    public InventoryFileReader(String inventoryFileName, String filePath) {
-        this.inventoryFileName = inventoryFileName;
+    public InventoryFileReader(String filePath) {
         this.filePath = filePath;
         this.inventoryFile = new File(filePath);
     }

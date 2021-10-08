@@ -1,11 +1,11 @@
 package com.techelevator.view;
 
 import com.techelevator.CateringSystemCLI;
-import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.items.CateringItem;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -31,74 +31,65 @@ public class Menu {
 		System.out.println();
 	}
 
-	public void showMainMenu() {
+	public String showMainMenu() {
 		System.out.println("(1) Display Catering Items");
 		System.out.println("(2) Order");
 		System.out.println("(3) Quit");
 
-		String userInput = in.nextLine();
-
-
+		return in.nextLine();
 		// CateringSystem variable in CLI? CLI then tells the System when to make calculations, change inventory, etc
 		// ^^ That variable can be public static and then we'll have access anywhere with CateringSystemCLI.CateringSystem
 		// for(CateringItem item :
-		if(userInput.equals("1")){
-			for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
-				System.out.println(item);
-			}
-		}else if(userInput.equals("2")){
-			this.orderMenu();
-		}
-
-
 	}
-	public void orderMenu(){
+
+	// file not found method
+	public void displayFileNotFound(File file) {
+		System.out.println("Could not find file at file path: " + file.getAbsolutePath());
+	}
+
+	public String orderMenu(double currentBalance){
 		System.out.println("(1) Add money");
 		System.out.println("(2) Select products");
 		System.out.println("(3) Complete transaction");
-		System.out.println("Current account balance: " +
-				currency.format(CateringSystemCLI.getCateringSystem().getAccountBalance()));
-		String userInput = in.nextLine();
-		if(userInput.equals("1")){
-			System.out.println("How much money would you like to add? (in whole dollars, limit: $4500)");
-			double userBalance = Double.parseDouble(in.nextLine());
-			if(CateringSystemCLI.getCateringSystem().addAccountBalance(userBalance) != -1){
-				System.out.println("Current account balance: " +
-						currency.format(CateringSystemCLI.getCateringSystem().getAccountBalance()));
-			}else{
-				System.out.println("Balance limit exceeded or invalid input, please try again.");
-				orderMenu();
-			}
-		}else if(userInput.equals("2")){
-			System.out.println("Input the Product Code of the desired item: ");
-			String desiredItem = in.nextLine();
-			System.out.println("How many would you like?");
-			int desiredQuantity = Integer.parseInt(in.nextLine());
-			String cartMessage = CateringSystemCLI.getCateringSystem().addItemToCart(desiredItem, desiredQuantity);
-			System.out.println(cartMessage);
-			orderMenu();
-
-
-		}
-
-
+		System.out.println("Current account balance: " + currency.format(currentBalance));
+		return in.nextLine();
 	}
 
-	public InventoryFileReader inventory() throws FileNotFoundException {
-		System.out.println("Enter the exact path of the inventory file: ");
+	public String getFileNameFromUser() {
+		System.out.println("Enter the exact path of the inventory file including file name: ");
 		String filePath = in.nextLine();
-		System.out.println("Enter the file name: ");
-		String fileName = in.nextLine();
-		InventoryFileReader fileReader = new InventoryFileReader(fileName,filePath);
-		return fileReader;
-
+//		System.out.println("Enter the file name: ");
+//		String fileName = in.nextLine();
+		return filePath;
 	}
 
-	public void restock(){
-		for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
-			item.setProductCount(25);
+	public double getMoneyToAdd() {
+		System.out.println("How much money would you like to add? (in whole dollars, limit: $4500)");
+		double userBalance = Double.parseDouble(in.nextLine());
+		return userBalance;
+	}
+
+	public void displayCateringItems(List<CateringItem> inventory) {
+		for (CateringItem item : inventory) {
+			System.out.println(item);
 		}
 	}
 
+	public void displayAddMoneyError() {
+		System.out.println("Balance limit exceeded or invalid input, please try again.");
+	}
 
+	public String askForProductCode() {
+		System.out.println("Input the Product Code of the desired item: ");
+		return in.nextLine();
+	}
+
+	public int askForQuantity() {
+		System.out.println("How many would you like?");
+		return Integer.parseInt(in.nextLine());
+	}
+
+	public void shoppingCartMessage(String message) {
+		System.out.println(message);
+	}
 }

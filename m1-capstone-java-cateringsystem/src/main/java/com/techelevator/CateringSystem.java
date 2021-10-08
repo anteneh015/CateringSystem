@@ -6,8 +6,11 @@ package com.techelevator;
  */
 
 
+import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.items.CateringItem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +23,17 @@ public class CateringSystem {
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
 
+    public CateringSystem (String file) throws FileNotFoundException {
+        InventoryFileReader fileReader = new InventoryFileReader(file);
+        this.inventoryList = fileReader.readFile();
+    }
+
+//    public void restock(){
+//        for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
+//            item.setProductCount(25);
+//        }
+//    }
+
     public double getAccountBalance() {
         return accountBalance;
     }
@@ -28,20 +42,21 @@ public class CateringSystem {
         return totalOrderAmount;
     }
 
-    public double addAccountBalance(double moneyToAdd) {
+
+    public boolean addAccountBalance(double moneyToAdd) {
         if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0){
-            return -1;
+            return false;
         }
         this.accountBalance += moneyToAdd;
-        return this.accountBalance;
+        return true;
     }
-   public double subtractAccountBalance(double moneyToSubtract){
-       if(accountBalance - moneyToSubtract < 0){
-           return -1;
-       }
 
+   public boolean subtractAccountBalance(double moneyToSubtract){
+       if(accountBalance - moneyToSubtract < 0){
+           return false;
+       }
         this.accountBalance -= moneyToSubtract;
-       return this.accountBalance;
+            return true;
    }
 
     public List<CateringItem> getInventoryList() {
@@ -52,9 +67,6 @@ public class CateringSystem {
         return shoppingCart;
     }
 
-    public void setInventoryList(List<CateringItem> inventoryList) {
-        this.inventoryList = inventoryList;
-    }
 
     public String  addItemToCart(String desiredItem, int desiredQuantity){
         boolean codeIsFound = false;
@@ -68,7 +80,7 @@ public class CateringSystem {
                if(desiredQuantity > Integer.parseInt(item.getProductCount())){
                    return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
                }
-               if(this.subtractAccountBalance(item.getPrice() * desiredQuantity) == -1) {
+               if(!(subtractAccountBalance(item.getPrice() * desiredQuantity))) {
                    return "Insufficient funds.";
                }
 
