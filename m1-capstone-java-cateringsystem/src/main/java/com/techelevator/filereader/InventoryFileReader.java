@@ -36,8 +36,6 @@ public class InventoryFileReader {
                 double price = Double.parseDouble(splitLine[3]);
                 CateringItem cateringItem = new CateringItem(splitLine[2], price, splitLine[1], splitLine[0] );
                 inventory.add(cateringItem);
-
-
             }
 
         }

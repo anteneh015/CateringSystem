@@ -1,12 +1,11 @@
 package com.techelevator.view;
 
-import com.techelevator.CateringSystem;
+import com.techelevator.CateringSystemCLI;
 import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.items.CateringItem;
-import com.techelevator.items.Inventory;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 /*
@@ -18,10 +17,11 @@ import java.util.Scanner;
  * should include no "work" that is the job of the catering system.
  */
 public class Menu {
-	
+
+	NumberFormat currency = NumberFormat.getCurrencyInstance();
 	private static final Scanner in = new Scanner(System.in);
-	private Inventory inventory;
-	private CateringSystem cateringSystem = new CateringSystem();
+
+	//private CateringSystem cateringSystem = new CateringSystem();
 
 	public void showWelcomeMessage() {
 		System.out.println("*************************");
@@ -38,8 +38,12 @@ public class Menu {
 
 		String userInput = in.nextLine();
 
+
+		// CateringSystem variable in CLI? CLI then tells the System when to make calculations, change inventory, etc
+		// ^^ That variable can be public static and then we'll have access anywhere with CateringSystemCLI.CateringSystem
+		// for(CateringItem item :
 		if(userInput.equals("1")){
-			for(CateringItem item : inventory.getInventoryList()){
+			for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
 				System.out.println(item);
 			}
 		}else if(userInput.equals("2")){
@@ -52,25 +56,46 @@ public class Menu {
 		System.out.println("(1) Add money");
 		System.out.println("(2) Select products");
 		System.out.println("(3) Complete transaction");
-		System.out.println("Current account balance: " + cateringSystem.getAccountBalance());
+		System.out.println("Current account balance: " +
+				currency.format(CateringSystemCLI.getCateringSystem().getAccountBalance()));
+		String userInput = in.nextLine();
+		if(userInput.equals("1")){
+			System.out.println("How much money would you like to add? (in whole dollars, limit: $4500)");
+			double userBalance = Double.parseDouble(in.nextLine());
+			if(CateringSystemCLI.getCateringSystem().addAccountBalance(userBalance) != -1){
+				System.out.println("Current account balance: " +
+						currency.format(CateringSystemCLI.getCateringSystem().getAccountBalance()));
+			}else{
+				System.out.println("Balance limit exceeded or invalid input, please try again.");
+				orderMenu();
+			}
+		}else if(userInput.equals("2")){
+			System.out.println("Input the Product Code of the desired item: ");
+			String desiredItem = in.nextLine();
+			System.out.println("How many would you like?");
+			int desiredQuantity = Integer.parseInt(in.nextLine());
+			CateringSystemCLI.getCateringSystem().addItemToCart(desiredItem, desiredQuantity);
+
+
+
+		}
 
 
 	}
 
-	public void inventory() throws FileNotFoundException {
+	public InventoryFileReader inventory() throws FileNotFoundException {
 		System.out.println("Enter the exact path of the inventory file: ");
 		String filePath = in.nextLine();
 		System.out.println("Enter the file name: ");
 		String fileName = in.nextLine();
 		InventoryFileReader fileReader = new InventoryFileReader(fileName,filePath);
-		inventory = new Inventory();
-		inventory.setInventoryList(fileReader.readFile());
+		return fileReader;
 
 	}
 
 	public void restock(){
 
-		for(CateringItem item : inventory.getInventoryList()){
+		for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
 			item.setProductCount(25);
 		}
 

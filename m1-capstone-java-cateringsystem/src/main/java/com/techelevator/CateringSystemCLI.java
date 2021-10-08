@@ -1,7 +1,9 @@
 package com.techelevator;
 
+import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.view.Menu;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 /*
@@ -23,9 +25,15 @@ public class CateringSystemCLI {
 	 * Remember every class and data structure is a data types and can be passed as arguments to methods or constructors.
 	 */
 	private Menu menu;
+	private static CateringSystem cateringSystem;
 
-	public CateringSystemCLI(Menu menu) {
+	public CateringSystemCLI(Menu menu, CateringSystem cateringSystem) {
 		this.menu = menu;
+		this.cateringSystem = cateringSystem;
+	}
+
+	public static CateringSystem getCateringSystem() {
+		return cateringSystem;
 	}
 
 	/*
@@ -34,7 +42,8 @@ public class CateringSystemCLI {
 	public void run() throws FileNotFoundException {
 
 		menu.showWelcomeMessage();
-		menu.inventory();
+		InventoryFileReader fileReader = menu.inventory();
+		cateringSystem.setInventoryList(fileReader.readFile());
 		menu.restock();
 
 		while (true) {
@@ -59,7 +68,8 @@ public class CateringSystemCLI {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 		Menu menu = new Menu();
-		CateringSystemCLI cli = new CateringSystemCLI(menu);
+		CateringSystem cateringSystem = new CateringSystem();
+		CateringSystemCLI cli = new CateringSystemCLI(menu, cateringSystem);
 		cli.run();
 	}
 }

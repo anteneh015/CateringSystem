@@ -6,7 +6,7 @@ import java.text.NumberFormat;
     This represents a single catering item in the system
  */
 public class CateringItem {
-NumberFormat currency = NumberFormat.getCurrencyInstance();
+    NumberFormat currency = NumberFormat.getCurrencyInstance();
     private String name;
     private double price;
     private int productCount = 25;
@@ -41,6 +41,13 @@ NumberFormat currency = NumberFormat.getCurrencyInstance();
 
     public void setProductCount(int productCount) {
         this.productCount = productCount;
+    }
+
+    public void purchaseItem(int desiredQuantity){
+        if(productCount - desiredQuantity < 0){
+        }else{
+            setProductCount(productCount - desiredQuantity);
+        }
     }
 
     public String getProductType() {
