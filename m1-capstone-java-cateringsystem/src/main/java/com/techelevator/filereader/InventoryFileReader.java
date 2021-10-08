@@ -13,12 +13,11 @@ import java.util.Scanner;
  */
 public class InventoryFileReader {
 
-    private String inventoryFileName;
+
     private String filePath;
     private File inventoryFile;
 
-    public InventoryFileReader(String inventoryFileName, String filePath) {
-        this.inventoryFileName = inventoryFileName;
+    public InventoryFileReader(String filePath) {
         this.filePath = filePath;
         this.inventoryFile = new File(filePath);
     }
@@ -36,6 +35,7 @@ public class InventoryFileReader {
                 double price = Double.parseDouble(splitLine[3]);
                 CateringItem cateringItem = new CateringItem(splitLine[2], price, splitLine[1], splitLine[0] );
                 inventory.add(cateringItem);
+
             }
 
         }
