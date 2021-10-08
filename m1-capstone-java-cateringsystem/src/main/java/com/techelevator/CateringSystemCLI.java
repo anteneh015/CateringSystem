@@ -1,6 +1,7 @@
 package com.techelevator;
 
 import com.techelevator.filereader.InventoryFileReader;
+import com.techelevator.items.CateringItem;
 import com.techelevator.view.Menu;
 
 import java.io.File;
@@ -42,11 +43,14 @@ public class CateringSystemCLI {
 		String filePathAsString = menu.getFileNameFromUser();
 
 		// Creating Inventory (read file set equal to list)
+		CateringSystem cateringSystem = null;
 		try {
-			CateringSystem cateringSystem = new CateringSystem(filePathAsString);
+			cateringSystem = new CateringSystem(filePathAsString);
 		} catch (FileNotFoundException e) {
 			File inventoryFile = new File(filePathAsString);
 			menu.displayFileNotFound(inventoryFile);
+			// TODO Make sure this kills the program
+			return;
 		}
 
 		while (true) {
@@ -61,10 +65,34 @@ public class CateringSystemCLI {
 			*/
 
 			// Show main menu
-			menu.showMainMenu();
+			String userMainMenuSelection = menu.showMainMenu();
 			// if (1) Display Items
+			if(userMainMenuSelection.equals("1")){
+				menu.displayCateringItems(cateringSystem.getInventoryList());
+				// else if (2) Order Menu
+			}else if(userMainMenuSelection.equals("2")){
+				while(true) {
+					String userOrderMenuSelection = menu.orderMenu(cateringSystem.getAccountBalance());
+					if (userOrderMenuSelection.equals("1")) {
+						double requestedAddedMoney = menu.getMoneyToAdd();
+						boolean moneyIsAdded = cateringSystem.addAccountBalance(requestedAddedMoney);
+						if (!moneyIsAdded) {
+							menu.displayAddMoneyError();
+						}
+					} else if (userMainMenuSelection.equals("2")) {
+						String desiredItem = menu.askForProductCode();
+						int desiredQuantity = menu.askForQuantity();
+						String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
+						menu.shoppingCartMessage(cartMessage);
+					}
+				}
+			}
 
-			// else if (2) Order Menu
+			//Complete Transaction
+			else if (userMainMenuSelection.equals("3")) {
+
+			}
+
 				// Display Order Menu
 					// Do processing of add money
 					// purchase

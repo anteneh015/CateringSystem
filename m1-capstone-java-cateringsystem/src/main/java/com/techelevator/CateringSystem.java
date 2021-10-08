@@ -42,20 +42,21 @@ public class CateringSystem {
         return totalOrderAmount;
     }
 
-    public double addAccountBalance(double moneyToAdd) {
+
+    public boolean addAccountBalance(double moneyToAdd) {
         if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0){
-            return -1;
+            return false;
         }
         this.accountBalance += moneyToAdd;
-        return this.accountBalance;
+        return true;
     }
-   public double subtractAccountBalance(double moneyToSubtract){
-       if(accountBalance - moneyToSubtract < 0){
-           return -1;
-       }
 
+   public boolean subtractAccountBalance(double moneyToSubtract){
+       if(accountBalance - moneyToSubtract < 0){
+           return false;
+       }
         this.accountBalance -= moneyToSubtract;
-       return this.accountBalance;
+            return true;
    }
 
     public List<CateringItem> getInventoryList() {
@@ -79,7 +80,7 @@ public class CateringSystem {
                if(desiredQuantity > Integer.parseInt(item.getProductCount())){
                    return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
                }
-               if(this.subtractAccountBalance(item.getPrice() * desiredQuantity) == -1) {
+               if(!(subtractAccountBalance(item.getPrice() * desiredQuantity))) {
                    return "Insufficient funds.";
                }
 
