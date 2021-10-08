@@ -6,8 +6,11 @@ package com.techelevator;
  */
 
 
+import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.items.CateringItem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +22,17 @@ public class CateringSystem {
     private double accountBalance = 0;
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
+
+    public CateringSystem (String file) throws FileNotFoundException {
+        InventoryFileReader fileReader = new InventoryFileReader(file);
+        this.inventoryList = fileReader.readFile();
+    }
+
+//    public void restock(){
+//        for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
+//            item.setProductCount(25);
+//        }
+//    }
 
     public double getAccountBalance() {
         return accountBalance;
@@ -52,9 +66,6 @@ public class CateringSystem {
         return shoppingCart;
     }
 
-    public void setInventoryList(List<CateringItem> inventoryList) {
-        this.inventoryList = inventoryList;
-    }
 
     public String  addItemToCart(String desiredItem, int desiredQuantity){
         boolean codeIsFound = false;

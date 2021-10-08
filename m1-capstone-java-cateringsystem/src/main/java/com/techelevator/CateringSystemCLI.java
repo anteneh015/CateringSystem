@@ -25,41 +25,54 @@ public class CateringSystemCLI {
 	 * Remember every class and data structure is a data types and can be passed as arguments to methods or constructors.
 	 */
 	private Menu menu;
-	private static CateringSystem cateringSystem;
 
-	public CateringSystemCLI(Menu menu, CateringSystem cateringSystem) {
+	public CateringSystemCLI(Menu menu) {
 		this.menu = menu;
-		this.cateringSystem = cateringSystem;
-	}
-
-	public static CateringSystem getCateringSystem() {
-		return cateringSystem;
 	}
 
 	/*
 	 * Your application starts here
 	 */
-	public void run() throws FileNotFoundException {
+	public void run() {
 
+		// welcome
 		menu.showWelcomeMessage();
-		InventoryFileReader fileReader = menu.inventory();
-		cateringSystem.setInventoryList(fileReader.readFile());
-		menu.restock();
+
+		// Get File From User
+		String filePathAsString = menu.getFileNameFromUser();
+
+		// Creating Inventory (read file set equal to list)
+		try {
+			CateringSystem cateringSystem = new CateringSystem(filePathAsString);
+		} catch (FileNotFoundException e) {
+			File inventoryFile = new File(filePathAsString);
+			menu.displayFileNotFound(inventoryFile);
+		}
 
 		while (true) {
-
-
-
-			menu.showMainMenu();
 			/*
 			Display the Starting Menu and get the users choice.
 			Remember all uses of System.out and System.in should be in the menu
-			
-			IF the User Choice is Display Vending Machine Items, 
+
+			IF the User Choice is Display Catering Items,
 				THEN display vending machine items
 			ELSE IF the User's Choice is Purchase,
 				THEN go to the purchase menu
 			*/
+
+			// Show main menu
+			menu.showMainMenu();
+			// if (1) Display Items
+
+			// else if (2) Order Menu
+				// Display Order Menu
+					// Do processing of add money
+					// purchase
+					// complete transaction
+			// else if (3) Quit
+				// break it all. Screw it!!
+
+
 		}
 	}
 
@@ -68,8 +81,7 @@ public class CateringSystemCLI {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 		Menu menu = new Menu();
-		CateringSystem cateringSystem = new CateringSystem();
-		CateringSystemCLI cli = new CateringSystemCLI(menu, cateringSystem);
+		CateringSystemCLI cli = new CateringSystemCLI(menu);
 		cli.run();
 	}
 }

@@ -1,10 +1,9 @@
 package com.techelevator.view;
 
 import com.techelevator.CateringSystemCLI;
-import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.items.CateringItem;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.Scanner;
 
@@ -49,15 +48,18 @@ public class Menu {
 		}else if(userInput.equals("2")){
 			this.orderMenu();
 		}
-
-
 	}
-	public void orderMenu(){
+
+	// file not found method
+	public void displayFileNotFound(File file) {
+		System.out.println("Could not find file at file path: " + file.getAbsolutePath());
+	}
+
+	public void orderMenu(double currentBalance){
 		System.out.println("(1) Add money");
 		System.out.println("(2) Select products");
 		System.out.println("(3) Complete transaction");
-		System.out.println("Current account balance: " +
-				currency.format(CateringSystemCLI.getCateringSystem().getAccountBalance()));
+		System.out.println("Current account balance: " + currency.format(currentBalance));
 		String userInput = in.nextLine();
 		if(userInput.equals("1")){
 			System.out.println("How much money would you like to add? (in whole dollars, limit: $4500)");
@@ -84,21 +86,12 @@ public class Menu {
 
 	}
 
-	public InventoryFileReader inventory() throws FileNotFoundException {
-		System.out.println("Enter the exact path of the inventory file: ");
+	public String getFileNameFromUser() {
+		System.out.println("Enter the exact path of the inventory file including file name: ");
 		String filePath = in.nextLine();
-		System.out.println("Enter the file name: ");
-		String fileName = in.nextLine();
-		InventoryFileReader fileReader = new InventoryFileReader(fileName,filePath);
-		return fileReader;
-
-	}
-
-	public void restock(){
-
-		for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
-			item.setProductCount(25);
-		}
+//		System.out.println("Enter the file name: ");
+//		String fileName = in.nextLine();
+		return filePath;
 
 	}
 
