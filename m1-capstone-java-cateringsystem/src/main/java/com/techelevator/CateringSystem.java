@@ -35,6 +35,14 @@ public class CateringSystem {
         this.accountBalance += moneyToAdd;
         return this.accountBalance;
     }
+   public double subtractAccountBalance(double moneyToSubtract){
+       if(accountBalance - moneyToSubtract < 0){
+           return -1;
+       }
+
+        this.accountBalance -= moneyToSubtract;
+       return this.accountBalance;
+   }
 
     public List<CateringItem> getInventoryList() {
         return inventoryList;
@@ -48,14 +56,32 @@ public class CateringSystem {
         this.inventoryList = inventoryList;
     }
 
-    public void addItemToCart(String desiredItem, int desiredQuantity){
+    public String  addItemToCart(String desiredItem, int desiredQuantity){
+        boolean codeIsFound = false;
         for(CateringItem item : this.inventoryList){
             if(desiredItem.equals(item.getProductCode())){
+                codeIsFound = true;
+                
+               if(item.getProductCount().equals("SOLD OUT")){
+                   return "Item is Sold Out";
+               }
+               if(desiredQuantity > Integer.parseInt(item.getProductCount())){
+                   return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
+               }
+               if(this.subtractAccountBalance(item.getPrice() * desiredQuantity) == -1) {
+                   return "Insufficient funds.";
+               }
+
                 this.shoppingCart.put(item, desiredQuantity);
                 this.totalOrderAmount += (item.getPrice() * desiredQuantity);
                 item.purchaseItem(desiredQuantity);
+
+
             }
-        }
+        }if (codeIsFound == false){
+            return "Product code not found";
+
+        } return "Item successfully added to cart";
     }
 
 }

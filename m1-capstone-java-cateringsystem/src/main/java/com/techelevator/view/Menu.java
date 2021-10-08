@@ -74,8 +74,9 @@ public class Menu {
 			String desiredItem = in.nextLine();
 			System.out.println("How many would you like?");
 			int desiredQuantity = Integer.parseInt(in.nextLine());
-			CateringSystemCLI.getCateringSystem().addItemToCart(desiredItem, desiredQuantity);
-
+			String cartMessage = CateringSystemCLI.getCateringSystem().addItemToCart(desiredItem, desiredQuantity);
+			System.out.println(cartMessage);
+			orderMenu();
 
 
 		}
