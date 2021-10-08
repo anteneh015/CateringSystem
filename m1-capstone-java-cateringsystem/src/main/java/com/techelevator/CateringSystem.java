@@ -73,7 +73,7 @@ public class CateringSystem {
         for(CateringItem item : this.inventoryList){
             if(desiredItem.equals(item.getProductCode())){
                 codeIsFound = true;
-                
+
                if(item.getProductCount().equals("SOLD OUT")){
                    return "Item is Sold Out";
                }
