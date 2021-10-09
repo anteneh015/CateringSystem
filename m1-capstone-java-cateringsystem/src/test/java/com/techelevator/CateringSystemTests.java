@@ -1,6 +1,7 @@
 package com.techelevator;
 
 import com.techelevator.items.CateringItem;
+import com.techelevator.items.TotalSystemSaleItem;
 import org.junit.*;
 
 import java.io.FileNotFoundException;
@@ -14,6 +15,70 @@ public class CateringSystemTests {
     @Before
     public void setup() throws FileNotFoundException, IOException {
         cateringSystem = new CateringSystem("cateringsystem.csv");
+    }
+
+    @Test
+    public void add_account_balance_10() throws IOException {
+        cateringSystem.addAccountBalance(10);
+        Assert.assertEquals(10, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void add_account_balance_0() throws IOException {
+        cateringSystem.addAccountBalance(0);
+        Assert.assertEquals(0, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void add_account_balance_negative_number() throws IOException {
+        cateringSystem.addAccountBalance(-1);
+        Assert.assertEquals(0, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void add_account_balance_decimal() throws IOException {
+        cateringSystem.addAccountBalance(10.24);
+        Assert.assertEquals(0, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void add_account_balance_over_limit() throws IOException {
+        cateringSystem.addAccountBalance(4501);
+        Assert.assertEquals(0, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void add_account_balance_over_limit_has_money_to_start() throws IOException {
+        cateringSystem.setAccountBalance(2000);
+        cateringSystem.addAccountBalance(5000);
+        Assert.assertEquals(2000, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void subtract_account_balance_10(){
+        cateringSystem.setAccountBalance(11);
+        cateringSystem.subtractAccountBalance(10);
+        Assert.assertEquals(1, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void subtract_account_balance_0(){
+        cateringSystem.subtractAccountBalance(0);
+        Assert.assertEquals(0, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void subtract_account_balance_negative_value(){
+        cateringSystem.setAccountBalance(10);
+        cateringSystem.subtractAccountBalance(-1);
+        Assert.assertEquals(10, cateringSystem.getAccountBalance(), .009);
+    }
+
+    @Test
+    public void subtract_account_balance_too_much(){
+        cateringSystem.setAccountBalance(10);
+        cateringSystem.subtractAccountBalance(11);
+        Assert.assertEquals(10, cateringSystem.getAccountBalance(), .009);
     }
 
     @Test
@@ -108,13 +173,16 @@ public class CateringSystemTests {
         Assert.assertEquals(expectedShoppingCart, cateringSystem.getShoppingCart());
     }
 
-
-
-
-
-
-
-
-
+    /*   Integration test only??
+    @Test
+    public void add_to_total_system_sales_empty_to_start_successful_add(){
+        List<TotalSystemSaleItem> expectedList = new ArrayList<TotalSystemSaleItem>();
+        TotalSystemSaleItem testItem = new TotalSystemSaleItem("Wine", 3, 12);
+        expectedList.add(testItem);
+        cateringSystem.getShoppingCart().put(new CateringItem("Wine", 4, "B4", "Beverage"), 3);
+        cateringSystem.addToTotalSystemSales();
+        Assert.assertEquals(expectedList, cateringSystem.getTotalSystemSales());
+    }
+    */
 
 }

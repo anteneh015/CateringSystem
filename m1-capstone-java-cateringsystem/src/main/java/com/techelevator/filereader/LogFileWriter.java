@@ -49,7 +49,7 @@ public class LogFileWriter {
     }
 
     public void printTotalSystemSales(List<TotalSystemSaleItem> totalSystemSales) throws IOException {
-        try (FileWriter fileWriter = new FileWriter("TotalSales.rpt",false);
+        try (FileWriter fileWriter = new FileWriter("TotalSales.rpt",true);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             double systemSalesItemsTotal = 0;
             for (TotalSystemSaleItem currentItem : totalSystemSales) {

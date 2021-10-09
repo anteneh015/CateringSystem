@@ -19,8 +19,7 @@ import java.math.RoundingMode;
 import java.util.*;
 
 public class CateringSystem {
-
-
+    
     private double accountBalance = 0;
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
@@ -33,6 +32,77 @@ public class CateringSystem {
         File systemSalesFile = new File("TotalSales.rpt");
         systemSalesFile.createNewFile();
         totalSystemSales = fileReader.readTotalSalesFile(systemSalesFile);
+    }
+
+    public boolean addAccountBalance(double moneyToAdd) throws IOException {
+        if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0 || moneyToAdd < 0){
+            return false;
+        }
+        this.accountBalance += moneyToAdd;
+        logFileWriter.printAddAccountBalance(moneyToAdd, accountBalance);
+        return true;
+    }
+
+    public void subtractAccountBalance(double moneyToSubtract){
+        if(accountBalance - moneyToSubtract >= 0 && moneyToSubtract >= 0){
+            this.accountBalance -= moneyToSubtract;
+        }
+    }
+
+    public String  addItemToCart(String desiredItem, int desiredQuantity) throws IOException {
+        boolean codeIsFound = false;
+        for(CateringItem item : this.inventoryList){
+            if(desiredItem.equals(item.getProductCode())){
+                codeIsFound = true;
+
+                if(item.getProductCount().equals("SOLD OUT")){
+                    return "Item is SOLD OUT";
+                }
+                if(desiredQuantity > Integer.parseInt(item.getProductCount())){
+                    return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
+                }
+                if(item.getPrice()*desiredQuantity > getAccountBalance()) {
+                    return "Insufficient funds.";
+                }
+
+                this.shoppingCart.put(item, desiredQuantity);
+                subtractAccountBalance(item.getPrice() * desiredQuantity);
+                item.purchaseItem(desiredQuantity);
+                logFileWriter.printItemAddedToCart(item, desiredQuantity, accountBalance);
+
+            }
+        }if (codeIsFound == false){
+            return "Product code not found";
+
+        }
+        return "Item successfully added to cart";
+    }
+
+    public void addToTotalSystemSales() {
+        for (Map.Entry<CateringItem, Integer> entry : shoppingCart.entrySet()){
+            int shoppingCartItemQuantity = entry.getValue();
+            double shoppingCartItemTotalPrice = entry.getKey().getPrice() * shoppingCartItemQuantity;
+            String shoppingCartItemName = entry.getKey().getName();
+            if (totalSystemSales.size() == 0) {
+                totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
+            } else {
+                boolean isFound = false;
+                for (TotalSystemSaleItem item : totalSystemSales) {
+                    if (shoppingCartItemName.equals(item.getName())) {
+                        item.setQuantity(item.getQuantity() + shoppingCartItemQuantity);
+                        item.setTotalPrice(item.getTotalPrice() + shoppingCartItemTotalPrice);
+                        isFound = true;
+                    }
+                }
+                if (!isFound) {
+                    totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
+                }
+            }
+        }
+    }
+
+    public void updateTotalSystemSalesLog() throws IOException {
+        logFileWriter.printTotalSystemSales(totalSystemSales);
     }
 
     public Map<String, Integer> getChange() throws IOException {
@@ -82,30 +152,15 @@ public class CateringSystem {
         return changeMap;
     }
 
+    public void createNewShoppingCart() {
+        this.shoppingCart = new HashMap<CateringItem, Integer>();
+    }
+
+    // Getters and Setters:
+
     public double getAccountBalance() {
         return accountBalance;
     }
-
-
-
-    public boolean addAccountBalance(double moneyToAdd) throws IOException {
-        if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0){
-            return false;
-        }
-        this.accountBalance += moneyToAdd;
-        logFileWriter.printAddAccountBalance(moneyToAdd, accountBalance);
-        return true;
-    }
-
-    public void setAccountBalance(double accountBalance) {
-        this.accountBalance = accountBalance;
-    }
-
-    public void subtractAccountBalance(double moneyToSubtract){
-       if(accountBalance - moneyToSubtract >= 0){
-           this.accountBalance -= moneyToSubtract;
-       }
-   }
 
     public List<CateringItem> getInventoryList() {
         return inventoryList;
@@ -115,64 +170,8 @@ public class CateringSystem {
         return shoppingCart;
     }
 
-    public String  addItemToCart(String desiredItem, int desiredQuantity) throws IOException {
-        boolean codeIsFound = false;
-        for(CateringItem item : this.inventoryList){
-            if(desiredItem.equals(item.getProductCode())){
-                codeIsFound = true;
-
-               if(item.getProductCount().equals("SOLD OUT")){
-                   return "Item is SOLD OUT";
-               }
-               if(desiredQuantity > Integer.parseInt(item.getProductCount())){
-                   return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
-               }
-               if(item.getPrice()*desiredQuantity > getAccountBalance()) {
-                   return "Insufficient funds.";
-               }
-
-                this.shoppingCart.put(item, desiredQuantity);
-                subtractAccountBalance(item.getPrice() * desiredQuantity);
-                item.purchaseItem(desiredQuantity);
-                logFileWriter.printItemAddedToCart(item, desiredQuantity, accountBalance);
-
-            }
-        }if (codeIsFound == false){
-            return "Product code not found";
-
-        }
-        return "Item successfully added to cart";
-    }
-
-    public void addToTotalSystemSales() {
-        for (Map.Entry<CateringItem, Integer> entry : shoppingCart.entrySet()){
-            int shoppingCartItemQuantity = entry.getValue();
-            double shoppingCartItemTotalPrice = entry.getKey().getPrice() * shoppingCartItemQuantity;
-            String shoppingCartItemName = entry.getKey().getName();
-            if (totalSystemSales.size() == 0) {
-                totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
-            } else {
-                boolean isFound = false;
-                for (TotalSystemSaleItem item : totalSystemSales) {
-                    if (shoppingCartItemName.equals(item.getName())) {
-                        item.setQuantity(item.getQuantity() + shoppingCartItemQuantity);
-                        item.setTotalPrice(item.getTotalPrice() + shoppingCartItemTotalPrice);
-                        isFound = true;
-                    }
-                }
-                if (!isFound) {
-                    totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
-                }
-            }
-        }
-    }
-
-    public void createNewShoppingCart() {
-        this.shoppingCart = new HashMap<CateringItem, Integer>();
-    }
-
-    public void updateTotalSystemSalesLog() throws IOException {
-        logFileWriter.printTotalSystemSales(totalSystemSales);
+    public void setAccountBalance(double accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
     public void setInventoryList(List<CateringItem> inventoryList) {
