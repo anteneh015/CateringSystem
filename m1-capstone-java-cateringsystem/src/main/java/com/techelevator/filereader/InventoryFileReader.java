@@ -1,7 +1,7 @@
 package com.techelevator.filereader;
 
-import com.techelevator.TotalSystemSales;
 import com.techelevator.items.CateringItem;
+import com.techelevator.items.TotalSystemSaleItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,9 +41,9 @@ public class InventoryFileReader {
         return inventory;
     }
 
-    public List<String[]> readTotalSalesFile(File file) throws FileNotFoundException, IOException {
+    public List<TotalSystemSaleItem> readTotalSalesFile(File file) throws FileNotFoundException, IOException {
 
-        List<String[]> previousTotalSales = new ArrayList<String[]>();
+        List<TotalSystemSaleItem> previousTotalSales = new ArrayList<TotalSystemSaleItem>();
 
         try(Scanner fileScanner = new Scanner(file)){
 
@@ -52,8 +52,13 @@ public class InventoryFileReader {
                 String line = fileScanner.nextLine();
                 String[] splitLine = line.split("\\|");
                 // 0 item, 1 quantity, 2 price
-
-                previousTotalSales.add(splitLine);
+                boolean notTotalPriceLine = splitLine.length > 1;
+                if (notTotalPriceLine) {
+                    String itemName = splitLine[0];
+                    int quantity = Integer.parseInt(splitLine[1]);
+                    double price = Double.parseDouble(splitLine[2].replace("$", ""));
+                    previousTotalSales.add(new TotalSystemSaleItem(itemName, quantity, price));
+                }
             }
 
         }

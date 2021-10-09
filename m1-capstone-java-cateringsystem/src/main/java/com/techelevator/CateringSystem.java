@@ -9,16 +9,14 @@ package com.techelevator;
 import com.techelevator.filereader.InventoryFileReader;
 import com.techelevator.filereader.LogFileWriter;
 import com.techelevator.items.CateringItem;
+import com.techelevator.items.TotalSystemSaleItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CateringSystem {
 
@@ -27,20 +25,16 @@ public class CateringSystem {
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
     private LogFileWriter logFileWriter = new LogFileWriter();
-    private TotalSystemSales totalSystemSales = new TotalSystemSales();
+    private List<TotalSystemSaleItem> totalSystemSales = new ArrayList<TotalSystemSaleItem>();
 
     public CateringSystem (String file) throws FileNotFoundException, IOException {
         InventoryFileReader fileReader = new InventoryFileReader(file);
         this.inventoryList = fileReader.readFile();
-        //TODO Figure out how to get info from reader into this instance of totalSystemSales
-//        this.totalSystemSales = fileReader.readTotalSalesFile(new File("TotalSales.rpt"));
+        File systemSalesFile = new File("TotalSales.rpt");
+        systemSalesFile.createNewFile();
+        totalSystemSales = fileReader.readTotalSalesFile(systemSalesFile);
     }
 
-//    public void restock(){
-//        for(CateringItem item : CateringSystemCLI.getCateringSystem().getInventoryList()){
-//            item.setProductCount(25);
-//        }
-//    }\
     public Map<String, Integer> getChange() throws IOException {
         // this lets us round to 2 decimal places
         BigDecimal remainingBalance = BigDecimal.valueOf(this.accountBalance).setScale(2, RoundingMode.HALF_UP);
@@ -87,6 +81,7 @@ public class CateringSystem {
         subtractAccountBalance(accountBalance);
         return changeMap;
     }
+
     public double getAccountBalance() {
         return accountBalance;
     }
@@ -94,7 +89,6 @@ public class CateringSystem {
     public double getTotalOrderAmount() {
         return totalOrderAmount;
     }
-
 
     public boolean addAccountBalance(double moneyToAdd) throws IOException {
         if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0){
@@ -122,7 +116,6 @@ public class CateringSystem {
     public Map<CateringItem, Integer> getShoppingCart() {
         return shoppingCart;
     }
-
 
     public String  addItemToCart(String desiredItem, int desiredQuantity) throws IOException {
         boolean codeIsFound = false;
@@ -152,6 +145,30 @@ public class CateringSystem {
 
         }
         return "Item successfully added to cart";
+    }
+
+    public void addToTotalSystemSales() {
+        for (Map.Entry<CateringItem, Integer> entry : shoppingCart.entrySet()){
+            for(TotalSystemSaleItem item : totalSystemSales) {
+                int shoppingCartItemQuantity = entry.getValue();
+                double shoppingCartItemTotalPrice = entry.getKey().getPrice() * shoppingCartItemQuantity;
+                String shoppingCartItemName = entry.getKey().getName();
+                if (shoppingCartItemName.equals(item.getName())) {
+                    item.setQuantity(item.getQuantity() + shoppingCartItemQuantity);
+                    item.setTotalPrice(item.getTotalPrice() + shoppingCartItemTotalPrice);
+                } else {
+                    totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
+                }
+            }
+        }
+    }
+
+    public void createNewShoppingCart() {
+        this.shoppingCart = new HashMap<CateringItem, Integer>();
+    }
+
+    public void updateTotalSystemSalesLog() throws IOException {
+        logFileWriter.printTotalSystemSales(totalSystemSales);
     }
 
 }

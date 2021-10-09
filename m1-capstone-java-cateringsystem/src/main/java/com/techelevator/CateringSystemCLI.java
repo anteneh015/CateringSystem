@@ -1,7 +1,5 @@
 package com.techelevator;
 
-import com.techelevator.filereader.InventoryFileReader;
-import com.techelevator.items.CateringItem;
 import com.techelevator.view.Menu;
 
 import java.io.File;
@@ -103,6 +101,8 @@ public class CateringSystemCLI {
 							Map<String, Integer> changeMap = cateringSystem.getChange();
 							menu.displayChange(changeMap, accountBalance);
 							menu.displayTransactionReport(cateringSystem.getShoppingCart());
+							cateringSystem.addToTotalSystemSales();
+							cateringSystem.createNewShoppingCart();
 							break;
 						} catch (IOException e) {
 							menu.logFileWritingError();
@@ -114,7 +114,12 @@ public class CateringSystemCLI {
 					}
 				}
 			} else if (userMainMenuSelection.equals("3")) {
-				break;
+				try {
+					cateringSystem.updateTotalSystemSalesLog();
+					break;
+				} catch (IOException e){
+					menu.logFileWritingError();
+				}
 			}else{
 				menu.invalidMenuInput();
 			}

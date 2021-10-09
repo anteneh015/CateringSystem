@@ -1,6 +1,7 @@
 package com.techelevator.filereader;
 
 import com.techelevator.items.CateringItem;
+import com.techelevator.items.TotalSystemSaleItem;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /*
     This class should contain any and all details of access to the log file
@@ -46,4 +48,17 @@ public class LogFileWriter {
 
     }
 
+    public void printTotalSystemSales(List<TotalSystemSaleItem> totalSystemSales) throws IOException {
+        try (FileWriter fileWriter = new FileWriter("TotalSales.rpt",false);
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            double systemSalesItemsTotal = 0;
+            for (TotalSystemSaleItem currentItem : totalSystemSales) {
+                bufferedWriter.write(currentItem.getName() + "|" + currentItem.getQuantity() + "|" + currentItem.getTotalPrice());
+                bufferedWriter.newLine();
+                systemSalesItemsTotal += currentItem.getTotalPrice();
+            }
+            bufferedWriter.newLine();
+            bufferedWriter.write("**TOTAL SALES** " + currency.format(systemSalesItemsTotal));
+        }
+    }
 }
