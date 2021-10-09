@@ -42,7 +42,10 @@ public class Menu {
 		// ^^ That variable can be public static and then we'll have access anywhere with CateringSystemCLI.CateringSystem
 		// for(CateringItem item :
 	}
-
+public void  invalidMenuInput(){
+		System.out.println("Invalid input, please try again.");
+	System.out.println();
+	}
 	// file not found method
 	public void displayFileNotFound(File file) {
 		System.out.println("Could not find file at file path: " + file.getAbsolutePath());

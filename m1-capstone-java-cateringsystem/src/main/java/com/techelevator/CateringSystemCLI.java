@@ -108,10 +108,15 @@ public class CateringSystemCLI {
 							menu.logFileWritingError();
 						}
 
+					}else{
+						menu.invalidMenuInput();
+
 					}
 				}
 			} else if (userMainMenuSelection.equals("3")) {
 				break;
+			}else{
+				menu.invalidMenuInput();
 			}
 		}
 	}
