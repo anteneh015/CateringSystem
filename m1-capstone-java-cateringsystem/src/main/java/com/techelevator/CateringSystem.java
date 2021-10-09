@@ -7,10 +7,12 @@ package com.techelevator;
 
 
 import com.techelevator.filereader.InventoryFileReader;
+import com.techelevator.filereader.LogFileWriter;
 import com.techelevator.items.CateringItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -26,8 +28,9 @@ public class CateringSystem {
     private double accountBalance = 0;
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
+    private LogFileWriter logFileWriter = new LogFileWriter();
 
-    public CateringSystem (String file) throws FileNotFoundException {
+    public CateringSystem (String file) throws FileNotFoundException, IOException {
         InventoryFileReader fileReader = new InventoryFileReader(file);
         this.inventoryList = fileReader.readFile();
     }
@@ -37,7 +40,7 @@ public class CateringSystem {
 //            item.setProductCount(25);
 //        }
 //    }\
-    public Map<String, Integer> getChange() {
+    public Map<String, Integer> getChange() throws IOException {
         // this lets us round to 2 decimal places
         BigDecimal remainingBalance = BigDecimal.valueOf(this.accountBalance).setScale(2, RoundingMode.HALF_UP);
         Map<String, Integer> changeMap = new LinkedHashMap<>();
@@ -79,6 +82,7 @@ public class CateringSystem {
             }
 
         }
+        logFileWriter.printGiveChange(accountBalance);
         subtractAccountBalance(accountBalance);
         return changeMap;
     }
@@ -91,11 +95,12 @@ public class CateringSystem {
     }
 
 
-    public boolean addAccountBalance(double moneyToAdd) {
+    public boolean addAccountBalance(double moneyToAdd) throws IOException {
         if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0){
             return false;
         }
         this.accountBalance += moneyToAdd;
+        logFileWriter.printAddAccountBalance(moneyToAdd, accountBalance);
         return true;
     }
 
@@ -103,12 +108,10 @@ public class CateringSystem {
         this.accountBalance = accountBalance;
     }
 
-    public boolean subtractAccountBalance(double moneyToSubtract){
-       if(accountBalance - moneyToSubtract < 0){
-           return false;
+    public void subtractAccountBalance(double moneyToSubtract){
+       if(accountBalance - moneyToSubtract >= 0){
+           this.accountBalance -= moneyToSubtract;
        }
-        this.accountBalance -= moneyToSubtract;
-            return true;
    }
 
     public List<CateringItem> getInventoryList() {
@@ -120,7 +123,7 @@ public class CateringSystem {
     }
 
 
-    public String  addItemToCart(String desiredItem, int desiredQuantity){
+    public String  addItemToCart(String desiredItem, int desiredQuantity) throws IOException {
         boolean codeIsFound = false;
         for(CateringItem item : this.inventoryList){
             if(desiredItem.equals(item.getProductCode())){
@@ -132,20 +135,22 @@ public class CateringSystem {
                if(desiredQuantity > Integer.parseInt(item.getProductCount())){
                    return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
                }
-               if(!(subtractAccountBalance(item.getPrice() * desiredQuantity))) {
+               if(item.getPrice()*desiredQuantity > getAccountBalance()) {
                    return "Insufficient funds.";
                }
 
                 this.shoppingCart.put(item, desiredQuantity);
                 this.totalOrderAmount += (item.getPrice() * desiredQuantity);
+                subtractAccountBalance(item.getPrice() * desiredQuantity);
                 item.purchaseItem(desiredQuantity);
-
+                logFileWriter.printItemAddedToCart(item, desiredQuantity, accountBalance);
 
             }
         }if (codeIsFound == false){
             return "Product code not found";
 
-        } return "Item successfully added to cart";
+        }
+        return "Item successfully added to cart";
     }
 
 }

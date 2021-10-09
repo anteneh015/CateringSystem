@@ -6,6 +6,7 @@ import com.techelevator.view.Menu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 /*
@@ -52,6 +53,9 @@ public class CateringSystemCLI {
 			menu.displayFileNotFound(inventoryFile);
 			// TODO Make sure this kills the program
 			return;
+		} // TODO catch IOException from FileWriter
+		catch (IOException e) {
+
 		}
 
 		while (true) {
@@ -78,36 +82,39 @@ public class CateringSystemCLI {
 					String userOrderMenuSelection = menu.orderMenu(cateringSystem.getAccountBalance());
 					if (userOrderMenuSelection.equals("1")) {
 						double requestedAddedMoney = menu.getMoneyToAdd();
-						boolean moneyIsAdded = cateringSystem.addAccountBalance(requestedAddedMoney);
-						if (!moneyIsAdded) {
-							menu.displayAddMoneyError();
+						try {
+							boolean moneyIsAdded = cateringSystem.addAccountBalance(requestedAddedMoney);
+							if (!moneyIsAdded) {
+								menu.displayAddMoneyError();
+							}
+						} catch (IOException e) {
+							menu.logFileWritingError();
 						}
 					} else if (userOrderMenuSelection.equals("2")) {
 						String desiredItem = menu.askForProductCode();
 						int desiredQuantity = menu.askForQuantity();
-						String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
-						menu.shoppingCartMessage(cartMessage);
+						try {
+							String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
+							menu.shoppingCartMessage(cartMessage);
+						} catch (IOException e) {
+							menu.logFileWritingError();
+						}
 					}else if (userOrderMenuSelection.equals("3")){
 						double accountBalance = cateringSystem.getAccountBalance();
-						Map<String, Integer> changeMap = cateringSystem.getChange();
-						menu.displayChange(changeMap, accountBalance);
-						menu.displayTransactionReport(cateringSystem.getShoppingCart());
-						break;
+						try {
+							Map<String, Integer> changeMap = cateringSystem.getChange();
+							menu.displayChange(changeMap, accountBalance);
+							menu.displayTransactionReport(cateringSystem.getShoppingCart());
+							break;
+						} catch (IOException e) {
+							menu.logFileWritingError();
+						}
 
 					}
 				}
 			} else if (userMainMenuSelection.equals("3")) {
 				break;
 			}
-
-				// Display Order Menu
-					// Do processing of add money
-					// purchase
-					// complete transaction
-			// else if (3) Quit
-				// break it all. Screw it!!
-
-
 		}
 	}
 

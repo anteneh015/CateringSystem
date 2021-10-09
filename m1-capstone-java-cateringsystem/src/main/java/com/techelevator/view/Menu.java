@@ -118,4 +118,8 @@ public class Menu {
 	public void shoppingCartMessage(String message) {
 		System.out.println(message);
 	}
+
+	public void logFileWritingError() {
+		System.out.println("Error: could not write to Log");
+	}
 }

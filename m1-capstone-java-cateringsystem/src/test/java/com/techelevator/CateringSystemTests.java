@@ -3,6 +3,7 @@ package com.techelevator;
 import org.junit.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public class CateringSystemTests {
     private CateringSystem cateringSystem;
 
     @Before
-    public void setup() throws FileNotFoundException {
+    public void setup() throws FileNotFoundException, IOException {
         cateringSystem = new CateringSystem("cateringsystem.csv");
     }
 
