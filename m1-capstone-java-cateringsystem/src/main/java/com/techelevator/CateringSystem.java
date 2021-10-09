@@ -19,7 +19,7 @@ import java.math.RoundingMode;
 import java.util.*;
 
 public class CateringSystem {
-    
+
     private double accountBalance = 0;
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();

@@ -13,7 +13,6 @@ import java.util.*;
  */
 public class InventoryFileReader {
 
-
     private String filePath;
     private File inventoryFile;
 
