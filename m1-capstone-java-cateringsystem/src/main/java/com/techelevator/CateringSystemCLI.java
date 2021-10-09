@@ -73,8 +73,6 @@ public class CateringSystemCLI {
 			String userMainMenuSelection = menu.showMainMenu();
 			// if (1) Display Items
 			if(userMainMenuSelection.equals("1")){
-				// TODO FIX SOLD OUT Formatting
-				// TODO Touch up formatting for display
 				menu.displayCateringItems(cateringSystem.getInventoryList());
 				// else if (2) Order Menu
 			}else if(userMainMenuSelection.equals("2")){

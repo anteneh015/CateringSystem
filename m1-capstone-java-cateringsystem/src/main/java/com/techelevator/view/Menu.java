@@ -72,8 +72,12 @@ public class Menu {
 	}
 
 	public void displayCateringItems(List<CateringItem> inventory) {
+		System.out.printf("%-4s %-30s %-8s %-4s %n", "Code", "Name", "Price", "QTY");
+		System.out.println("-----------------------------------------------------");
 		for (CateringItem item : inventory) {
-			System.out.println(item);
+			System.out.printf("%-4s %-30s %-8s %-4s %n",
+					item.getProductCode(), item.getName(),
+					currency.format(item.getPrice()), item.getProductCount());
 		}
 		System.out.println();
 	}
