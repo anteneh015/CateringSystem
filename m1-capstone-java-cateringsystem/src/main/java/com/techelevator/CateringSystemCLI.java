@@ -25,6 +25,7 @@ public class CateringSystemCLI {
 	 * 
 	 * Remember every class and data structure is a data types and can be passed as arguments to methods or constructors.
 	 */
+	
 	private Menu menu;
 
 	public CateringSystemCLI(Menu menu) {
