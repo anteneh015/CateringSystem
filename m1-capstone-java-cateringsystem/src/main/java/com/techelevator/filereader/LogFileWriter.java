@@ -19,7 +19,7 @@ public class LogFileWriter {
 
     NumberFormat currency = NumberFormat.getCurrencyInstance();
     File logFile = new File("Log.txt");
-    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss a");
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");
 
     public LogFileWriter() throws IOException {
         logFile.createNewFile();
