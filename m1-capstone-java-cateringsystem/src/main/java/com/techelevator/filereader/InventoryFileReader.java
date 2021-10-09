@@ -26,16 +26,13 @@ public class InventoryFileReader {
         List<CateringItem> inventory = new ArrayList<CateringItem>();
 
         try(Scanner fileScanner = new Scanner(this.inventoryFile)){
-
             while(fileScanner.hasNextLine()){
-
                 String line = fileScanner.nextLine();
                 String[] splitLine = line.split("\\|");
                 double price = Double.parseDouble(splitLine[3]);
                 CateringItem cateringItem = new CateringItem(splitLine[2], price, splitLine[1], splitLine[0] );
                 inventory.add(cateringItem);
             }
-
         }
         return inventory;
     }
@@ -45,9 +42,7 @@ public class InventoryFileReader {
         List<TotalSystemSaleItem> previousTotalSales = new ArrayList<TotalSystemSaleItem>();
 
         try(Scanner fileScanner = new Scanner(file)){
-
             while(fileScanner.hasNextLine()){
-
                 String line = fileScanner.nextLine();
                 String[] splitLine = line.split("\\|");
                 // 0 item, 1 quantity, 2 price
@@ -59,7 +54,6 @@ public class InventoryFileReader {
                     previousTotalSales.add(new TotalSystemSaleItem(itemName, quantity, price));
                 }
             }
-
         }
         return previousTotalSales;
     }

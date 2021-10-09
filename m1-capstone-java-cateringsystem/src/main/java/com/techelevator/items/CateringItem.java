@@ -7,9 +7,10 @@ import java.text.NumberFormat;
  */
 public class CateringItem {
     NumberFormat currency = NumberFormat.getCurrencyInstance();
+    private static final int STARTING_QUANTITY = 25;
     private String name;
     private double price;
-    private int productCount = 25;
+    private int productCount = STARTING_QUANTITY;
     private String productCode;
     private String productType;
 
@@ -20,12 +21,38 @@ public class CateringItem {
         this.productType = productType;
     }
 
+    public void purchaseItem(int desiredQuantity){
+        if(productCount >= desiredQuantity  && desiredQuantity >= 0){
+            setProductCount(productCount - desiredQuantity);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return productCode + " " + name + " " + currency.format(price) +  " QTY:" + this.getProductCount() ;
+    }
+
     public String getProductCount() {
         if(productCount == 0){
             return "SOLD OUT";
         }
         return String.valueOf(productCount);
     }
+
+    public String getProductType() {
+        if(productType.equals("A")){
+            return "Appetizer";
+        }else if(productType.equals("B")){
+            return "Beverage";
+        }else if(productType.equals("E")){
+            return "Entree";
+        }else if (productType.equals("D")){
+            return "Dessert";
+        }
+        return "Invalid Product Type";
+    }
+
+    //Getters and Setters:
 
     public String getProductCode() {
         return productCode;
@@ -43,27 +70,8 @@ public class CateringItem {
         this.productCount = productCount;
     }
 
-    public void purchaseItem(int desiredQuantity){
-        if(productCount >= desiredQuantity  && desiredQuantity >= 0){
-            setProductCount(productCount - desiredQuantity);
-        }
-    }
 
-    public String getProductType() {
-        if(productType.equals("A")){
-            return "Appetizer";
-        }else if(productType.equals("B")){
-            return "Beverage";
-        }else if(productType.equals("E")){
-            return "Entree";
-        }else if (productType.equals("D")){
-            return "Dessert";
-        }
-        return "Invalid Product Type";
-    }
 
-    @Override
-    public String toString() {
-        return productCode + " " + name + " " + currency.format(price) +  " QTY:" + this.getProductCount() ;
-    }
+
+
 }

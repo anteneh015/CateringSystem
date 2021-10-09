@@ -12,6 +12,29 @@ public class TotalSystemSaleItem {
         this.totalPrice = totalPrice;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null){
+            return false;
+        }
+        if(obj instanceof TotalSystemSaleItem){
+            return this.name.equals(((TotalSystemSaleItem) obj).getName()) && this.quantity == ((TotalSystemSaleItem) obj).getQuantity()
+                    && this.totalPrice == ((TotalSystemSaleItem) obj).getTotalPrice();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + quantity;
+        hash = 19 * hash + (int) totalPrice;
+        hash = 19 * hash + (name == null ? 0 : name.hashCode());
+        return hash;
+    }
+
+    //Getters and Setters:
+
     public void setName(String name) {
         this.name = name;
     }
@@ -36,24 +59,5 @@ public class TotalSystemSaleItem {
         return totalPrice;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-       if(obj == null){
-           return false;
-       }
-       if(obj instanceof TotalSystemSaleItem){
-           return this.name.equals(((TotalSystemSaleItem) obj).getName()) && this.quantity == ((TotalSystemSaleItem) obj).getQuantity()
-           && this.totalPrice == ((TotalSystemSaleItem) obj).getTotalPrice();
-       }
-       return false;
-    }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 19 * hash + quantity;
-        hash = 19 * hash + (int) totalPrice;
-        hash = 19 * hash + (name == null ? 0 : name.hashCode());
-        return hash;
-    }
 }

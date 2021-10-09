@@ -20,6 +20,7 @@ import java.util.*;
 
 public class CateringSystem {
 
+    public static final int MAXIMUM_ACCOUNT_BALANCE = 4500;
     private double accountBalance = 0;
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
@@ -35,7 +36,7 @@ public class CateringSystem {
     }
 
     public boolean addAccountBalance(double moneyToAdd) throws IOException {
-        if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0 || moneyToAdd < 0){
+        if(accountBalance + moneyToAdd > MAXIMUM_ACCOUNT_BALANCE || moneyToAdd % 1 != 0 || moneyToAdd < 0){
             return false;
         }
         this.accountBalance += moneyToAdd;
@@ -44,7 +45,7 @@ public class CateringSystem {
     }
 
     public void subtractAccountBalance(double moneyToSubtract){
-        if(accountBalance - moneyToSubtract >= 0 && moneyToSubtract >= 0){
+        if(accountBalance >= moneyToSubtract && moneyToSubtract >= 0){
             this.accountBalance -= moneyToSubtract;
         }
     }
@@ -115,7 +116,6 @@ public class CateringSystem {
         BigDecimal tenCents = new BigDecimal(.10).setScale(2, RoundingMode.DOWN);
         BigDecimal fiveCents = new BigDecimal(.05).setScale(2, RoundingMode.DOWN);
 
-
         while (remainingBalance.compareTo(zero) > 0) {
             // remainingBalance -         20                 > = 0
             if (remainingBalance.subtract(new BigDecimal(20)).compareTo(zero) >= 0) {
@@ -145,7 +145,6 @@ public class CateringSystem {
             }else {
                 changeMap.put(bill, 1);
             }
-
         }
         logFileWriter.printGiveChange(accountBalance);
         subtractAccountBalance(accountBalance);

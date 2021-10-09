@@ -91,7 +91,6 @@ public class CateringSystemCLI {
 							menu.displayInvalidInputError();
 						}
 
-
 					} else if (userOrderMenuSelection.equals("2")) {
 						String desiredItem = menu.askForProductCode();
 						try{
@@ -105,7 +104,6 @@ public class CateringSystemCLI {
 						}catch (NumberFormatException e){
 							menu.displayInvalidInputError();
 						}
-
 
 					}else if (userOrderMenuSelection.equals("3")){
 						double accountBalance = cateringSystem.getAccountBalance();
@@ -122,9 +120,9 @@ public class CateringSystemCLI {
 
 					}else{
 						menu.invalidMenuInput();
-
 					}
 				}
+				// Quit Program and write to TotalSales.rpt
 			} else if (userMainMenuSelection.equals("3")) {
 				try {
 					cateringSystem.updateTotalSystemSalesLog();
