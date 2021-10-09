@@ -44,8 +44,7 @@ public class CateringItem {
     }
 
     public void purchaseItem(int desiredQuantity){
-        if(productCount - desiredQuantity < 0){
-        }else{
+        if(productCount >= desiredQuantity  && desiredQuantity >= 0){
             setProductCount(productCount - desiredQuantity);
         }
     }
@@ -65,6 +64,6 @@ public class CateringItem {
 
     @Override
     public String toString() {
-        return productCode + " " + name + " " + currency.format(price) + " (" + this.getProductCount() + " items left)";
+        return productCode + " " + name + " " + currency.format(price) +  " QTY:" + this.getProductCount() ;
     }
 }

@@ -20,7 +20,7 @@ import java.util.*;
 
 public class CateringSystem {
 
-    private double totalOrderAmount = 0;
+
     private double accountBalance = 0;
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
@@ -86,9 +86,7 @@ public class CateringSystem {
         return accountBalance;
     }
 
-    public double getTotalOrderAmount() {
-        return totalOrderAmount;
-    }
+
 
     public boolean addAccountBalance(double moneyToAdd) throws IOException {
         if(accountBalance + moneyToAdd > 4500 || moneyToAdd % 1 != 0){
@@ -124,7 +122,7 @@ public class CateringSystem {
                 codeIsFound = true;
 
                if(item.getProductCount().equals("SOLD OUT")){
-                   return "Item is Sold Out";
+                   return "Item is SOLD OUT";
                }
                if(desiredQuantity > Integer.parseInt(item.getProductCount())){
                    return "You requested " + desiredQuantity + ", we only have " + item.getProductCount() + " left.";
@@ -134,7 +132,6 @@ public class CateringSystem {
                }
 
                 this.shoppingCart.put(item, desiredQuantity);
-                this.totalOrderAmount += (item.getPrice() * desiredQuantity);
                 subtractAccountBalance(item.getPrice() * desiredQuantity);
                 item.purchaseItem(desiredQuantity);
                 logFileWriter.printItemAddedToCart(item, desiredQuantity, accountBalance);
@@ -178,4 +175,7 @@ public class CateringSystem {
         logFileWriter.printTotalSystemSales(totalSystemSales);
     }
 
+    public void setInventoryList(List<CateringItem> inventoryList) {
+        this.inventoryList = inventoryList;
+    }
 }

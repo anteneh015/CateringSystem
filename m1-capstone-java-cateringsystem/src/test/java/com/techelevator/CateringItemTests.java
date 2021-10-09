@@ -18,7 +18,7 @@ public class CateringItemTests {
     @Test
     public void to_string(){
         String testString = testItem.toString();
-        Assert.assertEquals("B1 Sparkling Water 1.35 25", testString);
+        Assert.assertEquals("B1 Sparkling Water $1.35 QTY:25", testString);
 
     }
 
@@ -26,7 +26,22 @@ public class CateringItemTests {
     public void to_string_sold_out(){
         testItem.setProductCount(0);
         String testString = testItem.toString();
-            Assert.assertEquals("B1 Sparkling Water 1.35 SOLD OUT", testString);
+            Assert.assertEquals("B1 Sparkling Water $1.35 QTY:SOLD OUT", testString);
     }
 
+    @Test
+    public void purchase_item_25(){
+        testItem.purchaseItem(25);
+        Assert.assertEquals("SOLD OUT", testItem.getProductCount());
+    }
+    @Test
+    public void purchase_item_26(){
+        testItem.purchaseItem(26);
+        Assert.assertEquals("25", testItem.getProductCount());
+    }
+    @Test
+    public void purchase_item_negative(){
+        testItem.purchaseItem(-5);
+        Assert.assertEquals("25", testItem.getProductCount() );
+    }
 }
