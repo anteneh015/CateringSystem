@@ -149,14 +149,21 @@ public class CateringSystem {
 
     public void addToTotalSystemSales() {
         for (Map.Entry<CateringItem, Integer> entry : shoppingCart.entrySet()){
-            for(TotalSystemSaleItem item : totalSystemSales) {
-                int shoppingCartItemQuantity = entry.getValue();
-                double shoppingCartItemTotalPrice = entry.getKey().getPrice() * shoppingCartItemQuantity;
-                String shoppingCartItemName = entry.getKey().getName();
-                if (shoppingCartItemName.equals(item.getName())) {
-                    item.setQuantity(item.getQuantity() + shoppingCartItemQuantity);
-                    item.setTotalPrice(item.getTotalPrice() + shoppingCartItemTotalPrice);
-                } else {
+            int shoppingCartItemQuantity = entry.getValue();
+            double shoppingCartItemTotalPrice = entry.getKey().getPrice() * shoppingCartItemQuantity;
+            String shoppingCartItemName = entry.getKey().getName();
+            if (totalSystemSales.size() == 0) {
+                totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
+            } else {
+                boolean isFound = false;
+                for (TotalSystemSaleItem item : totalSystemSales) {
+                    if (shoppingCartItemName.equals(item.getName())) {
+                        item.setQuantity(item.getQuantity() + shoppingCartItemQuantity);
+                        item.setTotalPrice(item.getTotalPrice() + shoppingCartItemTotalPrice);
+                        isFound = true;
+                    }
+                }
+                if (!isFound) {
                     totalSystemSales.add(new TotalSystemSaleItem(shoppingCartItemName, shoppingCartItemQuantity, shoppingCartItemTotalPrice));
                 }
             }

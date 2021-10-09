@@ -53,7 +53,7 @@ public class LogFileWriter {
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             double systemSalesItemsTotal = 0;
             for (TotalSystemSaleItem currentItem : totalSystemSales) {
-                bufferedWriter.write(currentItem.getName() + "|" + currentItem.getQuantity() + "|" + currentItem.getTotalPrice());
+                bufferedWriter.write(currentItem.getName() + "|" + currentItem.getQuantity() + "|" + currency.format(currentItem.getTotalPrice()));
                 bufferedWriter.newLine();
                 systemSalesItemsTotal += currentItem.getTotalPrice();
             }
