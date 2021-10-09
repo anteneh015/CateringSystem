@@ -31,7 +31,7 @@ public class LogFileWriter {
 
     public void printItemAddedToCart(CateringItem item, int quantityAdded, double accountBalance) throws IOException {
         printLog(quantityAdded + " " + item.getName() + " " +
-                item.getProductCode() + " " + item.getPrice()*quantityAdded, accountBalance);
+                item.getProductCode() + " " + currency.format(item.getPrice()*quantityAdded), accountBalance);
     }
 
     public void printGiveChange(double accountBalance) throws IOException {
@@ -43,6 +43,7 @@ public class LogFileWriter {
         try (FileWriter fileWriter = new FileWriter(logFile,true);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             bufferedWriter.write(LocalDateTime.now().format(dateFormat) + " " + transaction + " " + currency.format(accountBalance));
+            bufferedWriter.newLine();
         }
 
     }

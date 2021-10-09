@@ -17,7 +17,7 @@ public class CateringSystemTests {
     }
 
     @Test
-    public void get_change_input_rounding(){
+    public void get_change_input_rounding() throws IOException {
         cateringSystem.setAccountBalance(36.4044444444444444);
         Map<String, Integer> expectedValue = new LinkedHashMap<String, Integer>();
         expectedValue.put("20(s)", 1);
@@ -31,7 +31,7 @@ public class CateringSystemTests {
     }
 
     @Test
-    public void get_change_under_one_dollar(){
+    public void get_change_under_one_dollar() throws IOException {
         cateringSystem.setAccountBalance(0.404444444);
         Map<String, Integer> expectedValue = new LinkedHashMap<String, Integer>();
         expectedValue.put("Quarter(s)", 1);
@@ -41,7 +41,7 @@ public class CateringSystemTests {
     }
 
     @Test
-    public void get_change_zero(){
+    public void get_change_zero() throws IOException {
         cateringSystem.setAccountBalance(0);
         Map<String, Integer> expectedValue = new LinkedHashMap<String, Integer>();
         Assert.assertEquals(expectedValue, cateringSystem.getChange());

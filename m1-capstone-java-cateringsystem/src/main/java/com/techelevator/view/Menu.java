@@ -46,6 +46,7 @@ public class Menu {
 	// file not found method
 	public void displayFileNotFound(File file) {
 		System.out.println("Could not find file at file path: " + file.getAbsolutePath());
+		System.out.println();
 	}
 
 	public String orderMenu(double currentBalance){
@@ -59,14 +60,14 @@ public class Menu {
 	public String getFileNameFromUser() {
 		System.out.println("Enter the exact path of the inventory file including file name: ");
 		String filePath = in.nextLine();
-//		System.out.println("Enter the file name: ");
-//		String fileName = in.nextLine();
+		System.out.println();
 		return filePath;
 	}
 
 	public double getMoneyToAdd() {
 		System.out.println("How much money would you like to add? (in whole dollars, limit: $4500)");
 		double userBalance = Double.parseDouble(in.nextLine());
+		System.out.println();
 		return userBalance;
 	}
 
@@ -74,10 +75,12 @@ public class Menu {
 		for (CateringItem item : inventory) {
 			System.out.println(item);
 		}
+		System.out.println();
 	}
 
 	public void displayAddMoneyError() {
 		System.out.println("Balance limit exceeded or invalid input, please try again.");
+		System.out.println();
 	}
 
 	public void displayChange(Map<String, Integer> changeMap, double accountBalance){
@@ -117,6 +120,7 @@ public class Menu {
 
 	public void shoppingCartMessage(String message) {
 		System.out.println(message);
+		System.out.println();
 	}
 
 	public void logFileWritingError() {
