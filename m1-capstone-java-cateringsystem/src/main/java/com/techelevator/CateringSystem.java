@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,10 +27,13 @@ public class CateringSystem {
     private List<CateringItem> inventoryList;
     private Map<CateringItem, Integer> shoppingCart = new HashMap<CateringItem, Integer>();
     private LogFileWriter logFileWriter = new LogFileWriter();
+    private TotalSystemSales totalSystemSales = new TotalSystemSales();
 
     public CateringSystem (String file) throws FileNotFoundException, IOException {
         InventoryFileReader fileReader = new InventoryFileReader(file);
         this.inventoryList = fileReader.readFile();
+        //TODO Figure out how to get info from reader into this instance of totalSystemSales
+//        this.totalSystemSales = fileReader.readTotalSalesFile(new File("TotalSales.rpt"));
     }
 
 //    public void restock(){
