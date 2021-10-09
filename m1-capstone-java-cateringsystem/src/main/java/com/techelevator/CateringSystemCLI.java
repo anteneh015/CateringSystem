@@ -77,24 +77,36 @@ public class CateringSystemCLI {
 				while(true) {
 					String userOrderMenuSelection = menu.orderMenu(cateringSystem.getAccountBalance());
 					if (userOrderMenuSelection.equals("1")) {
-						double requestedAddedMoney = menu.getMoneyToAdd();
-						try {
-							boolean moneyIsAdded = cateringSystem.addAccountBalance(requestedAddedMoney);
-							if (!moneyIsAdded) {
-								menu.displayAddMoneyError();
+						try{
+							double requestedAddedMoney =  menu.getMoneyToAdd();
+							try {
+								boolean moneyIsAdded = cateringSystem.addAccountBalance(requestedAddedMoney);
+								if (!moneyIsAdded) {
+									menu.displayBalanceLimitError();
+								}
+							} catch (IOException e) {
+								menu.logFileWritingError();
 							}
-						} catch (IOException e) {
-							menu.logFileWritingError();
+						}catch (NumberFormatException e){
+							menu.displayInvalidInputError();
 						}
+
+
 					} else if (userOrderMenuSelection.equals("2")) {
 						String desiredItem = menu.askForProductCode();
-						int desiredQuantity = menu.askForQuantity();
-						try {
-							String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
-							menu.shoppingCartMessage(cartMessage);
-						} catch (IOException e) {
-							menu.logFileWritingError();
+						try{
+							int desiredQuantity = menu.askForQuantity();
+							try {
+								String cartMessage = cateringSystem.addItemToCart(desiredItem, desiredQuantity);
+								menu.shoppingCartMessage(cartMessage);
+							} catch (IOException e) {
+								menu.logFileWritingError();
+							}
+						}catch (NumberFormatException e){
+							menu.displayInvalidInputError();
 						}
+
+
 					}else if (userOrderMenuSelection.equals("3")){
 						double accountBalance = cateringSystem.getAccountBalance();
 						try {

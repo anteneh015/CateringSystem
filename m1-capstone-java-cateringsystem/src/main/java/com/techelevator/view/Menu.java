@@ -1,6 +1,6 @@
 package com.techelevator.view;
 
-import com.techelevator.CateringSystemCLI;
+
 import com.techelevator.items.CateringItem;
 
 import java.io.File;
@@ -67,9 +67,11 @@ public void  invalidMenuInput(){
 		return filePath;
 	}
 
-	public double getMoneyToAdd() {
+	public double getMoneyToAdd() throws NumberFormatException{
 		System.out.println("How much money would you like to add? (in whole dollars, limit: $4500)");
-		double userBalance = Double.parseDouble(in.nextLine());
+
+			double userBalance = Double.parseDouble(in.nextLine());
+
 		System.out.println();
 		return userBalance;
 	}
@@ -85,8 +87,8 @@ public void  invalidMenuInput(){
 		System.out.println();
 	}
 
-	public void displayAddMoneyError() {
-		System.out.println("Balance limit exceeded or invalid input, please try again.");
+	public void displayInvalidInputError() {
+		System.out.println("Invalid input, please try again.");
 		System.out.println();
 	}
 
@@ -120,7 +122,7 @@ public void  invalidMenuInput(){
 		return in.nextLine();
 	}
 
-	public int askForQuantity() {
+	public int askForQuantity() throws NumberFormatException{
 		System.out.println("How many would you like?");
 		return Integer.parseInt(in.nextLine());
 	}
@@ -128,6 +130,9 @@ public void  invalidMenuInput(){
 	public void shoppingCartMessage(String message) {
 		System.out.println(message);
 		System.out.println();
+	}
+	public void displayBalanceLimitError(){
+		System.out.println("Balance limit exceeded, please try again.");
 	}
 
 	public void logFileWritingError() {
