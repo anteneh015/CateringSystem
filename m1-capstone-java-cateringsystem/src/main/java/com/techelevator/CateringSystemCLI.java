@@ -25,7 +25,7 @@ public class CateringSystemCLI {
 	 * 
 	 * Remember every class and data structure is a data types and can be passed as arguments to methods or constructors.
 	 */
-	
+
 	private Menu menu;
 
 	public CateringSystemCLI(Menu menu) {
@@ -50,11 +50,10 @@ public class CateringSystemCLI {
 		} catch (FileNotFoundException e) {
 			File inventoryFile = new File(filePathAsString);
 			menu.displayFileNotFound(inventoryFile);
-			// TODO Make sure this kills the program
 			return;
-		} // TODO catch IOException from FileWriter
+		}
 		catch (IOException e) {
-
+			menu.logFileWritingError();
 		}
 
 		while (true) {
