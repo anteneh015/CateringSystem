@@ -59,6 +59,8 @@ public class LogFileWriter {
             }
             bufferedWriter.newLine();
             bufferedWriter.write("**TOTAL SALES** " + currency.format(systemSalesItemsTotal));
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
         }
     }
 }
