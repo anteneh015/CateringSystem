@@ -32,7 +32,9 @@ public class CateringSystem {
         this.inventoryList = fileReader.readFile();
         File systemSalesFile = new File("TotalSales.rpt");
         systemSalesFile.createNewFile();
-        totalSystemSales = fileReader.readTotalSalesFile(systemSalesFile);
+        File previousSystemSalesFile = new File("PreviousTotalSales.rpt");
+        previousSystemSalesFile.createNewFile();
+        totalSystemSales = fileReader.readTotalSalesFile(previousSystemSalesFile);
     }
 
     public boolean addAccountBalance(double moneyToAdd) throws IOException {

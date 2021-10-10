@@ -50,17 +50,24 @@ public class LogFileWriter {
 
     public void printTotalSystemSales(List<TotalSystemSaleItem> totalSystemSales) throws IOException {
         try (FileWriter fileWriter = new FileWriter("TotalSales.rpt",true);
-             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            FileWriter previousFileWriter = new FileWriter("PreviousTotalSales.rpt", false);
+            BufferedWriter previousBufferedWriter = new BufferedWriter(previousFileWriter)){
+
             double systemSalesItemsTotal = 0;
             for (TotalSystemSaleItem currentItem : totalSystemSales) {
                 bufferedWriter.write(currentItem.getName() + "|" + currentItem.getQuantity() + "|" + currency.format(currentItem.getTotalPrice()));
                 bufferedWriter.newLine();
+                previousBufferedWriter.write(currentItem.getName() + "|" + currentItem.getQuantity() + "|" + currency.format(currentItem.getTotalPrice()));
+                previousBufferedWriter.newLine();
                 systemSalesItemsTotal += currentItem.getTotalPrice();
             }
             bufferedWriter.newLine();
             bufferedWriter.write("**TOTAL SALES** " + currency.format(systemSalesItemsTotal));
             bufferedWriter.newLine();
             bufferedWriter.newLine();
+            previousBufferedWriter.newLine();
+            previousBufferedWriter.write("**TOTAL SALES** " + currency.format(systemSalesItemsTotal));
         }
     }
 }
